@@ -246,10 +246,27 @@ footer .logo-text small { color: var(--on-band-muted); }
   .hero-cta .btn { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+/* entrada suave: só opacity e transform; sem JavaScript o conteúdo fica visível */
+:root { --ry: 16px; --dur: 560ms; --ease: cubic-bezier(.22, .61, .36, 1); }
+.js-anim [data-reveal]:not(.is-in) { opacity: 0; transform: translate3d(0, var(--ry), 0); will-change: opacity, transform; }
+.js-anim [data-reveal="lg"]:not(.is-in) { transform: translate3d(0, calc(var(--ry) * 1.25), 0); }
+.js-anim [data-reveal].is-in { opacity: 1; transform: none; transition: opacity var(--dur) var(--ease) var(--d, 0ms), transform var(--dur) var(--ease) var(--d, 0ms); }
+@media (max-width: 600px) { :root { --ry: 12px; --dur: 480ms; } }
+@media (prefers-reduced-motion: reduce) { .js-anim [data-reveal]:not(.is-in), .js-anim [data-reveal].is-in { opacity: 1 !important; transform: none !important; transition: none !important; } }
 html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 </style>
 </head>
 <body>
+<script>
+/* Liga as animações só se o navegador permitir. Se o script de entrada não rodar em 3,5 s, tudo volta a aparecer. */
+(function () {
+  var d = document.documentElement;
+  try { if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return; } catch (e) { return; }
+  d.classList.add("js-anim");
+  setTimeout(function () { if (!window.__revealReady) d.classList.remove("js-anim"); }, 3500);
+})();
+</script>
+
 <div class="topbar">
   <div class="wrap">
     <span><svg class="i" data-icon="clock"></svg> Seg a sex 07h às 18h · Sáb 07h às 12h</span>
@@ -300,15 +317,15 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
     </div>
     <div class="wrap">
       <div>
-        <div class="hero-tag"><svg class="i" data-icon="leaf"></svg> Atacado e varejo agropecuário</div>
-        <h1>Tradição, tecnologia e força para o campo. Há <em>17 anos</em> cultivando parcerias em Arcos e região.</h1>
-        <p class="lead">Insumos agrícolas, saúde e nutrição animal, ferramentas, cercamentos e linha country em um só balcão, com condições de atacado para o produtor rural e atendimento técnico de quem conhece a lida.</p>
-        <div class="hero-cta">
+        <div class="hero-tag" data-reveal="hero" data-delay="0"><svg class="i" data-icon="leaf"></svg> Atacado e varejo agropecuário</div>
+        <h1 data-reveal="hero" data-delay="110">Tradição, tecnologia e força para o campo. Há <em>17 anos</em> cultivando parcerias em Arcos e região.</h1>
+        <p class="lead" data-reveal="hero" data-delay="230">Insumos agrícolas, saúde e nutrição animal, ferramentas, cercamentos e linha country em um só balcão, com condições de atacado para o produtor rural e atendimento técnico de quem conhece a lida.</p>
+        <div class="hero-cta" data-reveal="hero" data-delay="350">
           <a class="btn btn-wheat" data-wa="Olá! Gostaria de fazer uma cotação na HN Agropecuária." href="#"><svg class="i" data-icon="wa"></svg> Falar com especialista / Atacado</a>
           <a class="btn btn-ghost" href="#departamentos">Conhecer departamentos <svg class="i" data-icon="arrow"></svg></a>
         </div>
       </div>
-      <div class="hero-side">
+      <div class="hero-side" data-reveal="hero" data-delay="470">
         <div class="seal" aria-label="17 anos de história"><div><b>17</b><span>anos de<br>história</span></div></div>
         <div class="status-card">
           <div class="status-row"><span class="dot" id="dot"></span><span id="statusText">Verificando horário…</span></div>
@@ -321,22 +338,22 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
   <div class="stats">
     <div class="wrap">
       <div class="stats-box">
-        <div class="stat"><b>+17</b><span>anos no mercado de Arcos e região</span></div>
-        <div class="stat"><b>Atacado &amp; Varejo</b><span>atendimento para o produtor e para o consumidor</span></div>
-        <div class="stat"><b>+1.000</b><span>itens em estoque para pronta-entrega</span></div>
-        <div class="stat"><b>Balcão técnico</b><span>entrega rápida e consultoria no atendimento</span></div>
+        <div class="stat" data-reveal><b>+17</b><span>anos no mercado de Arcos e região</span></div>
+        <div class="stat" data-reveal><b>Atacado &amp; Varejo</b><span>atendimento para o produtor e para o consumidor</span></div>
+        <div class="stat" data-reveal><b>+1.000</b><span>itens em estoque para pronta-entrega</span></div>
+        <div class="stat" data-reveal><b>Balcão técnico</b><span>entrega rápida e consultoria no atendimento</span></div>
       </div>
     </div>
   </div>
 
   <section class="block" id="sobre">
     <div class="wrap about">
-      <div class="big">17<small>anos de tradição e confiança</small></div>
+      <div class="big" data-reveal="lg">17<small>anos de tradição e confiança</small></div>
       <div>
-        <div class="eyebrow">Sobre nós</div>
-        <h2 style="font-size:clamp(1.9rem,4vw,3rem);font-weight:800;margin:.8rem 0 1.2rem">Uma casa do campo no coração de Arcos.</h2>
-        <p>A <strong>HN Agropecuária</strong> atende como atacadista e varejista de produtos agrícolas, insumos agropecuários, medicamentos veterinários, nutrição animal e artigos country e de pesca.</p>
-        <p>Quem chega ao balcão encontra o que precisa para a lavoura, o rebanho, o pet e a lida diária, com orientação de uma equipe que acompanha o produtor da região há 17 anos.</p>
+        <div class="eyebrow" data-reveal>Sobre nós</div>
+        <h2 data-reveal style="font-size:clamp(1.9rem,4vw,3rem);font-weight:800;margin:.8rem 0 1.2rem">Uma casa do campo no coração de Arcos.</h2>
+        <p data-reveal>A <strong>HN Agropecuária</strong> atende como atacadista e varejista de produtos agrícolas, insumos agropecuários, medicamentos veterinários, nutrição animal e artigos country e de pesca.</p>
+        <p data-reveal>Quem chega ao balcão encontra o que precisa para a lavoura, o rebanho, o pet e a lida diária, com orientação de uma equipe que acompanha o produtor da região há 17 anos.</p>
       </div>
     </div>
   </section>
@@ -344,11 +361,11 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
   <section class="block" id="departamentos" style="padding-top:0">
     <div class="wrap">
       <div class="head">
-        <div class="eyebrow">Departamentos</div>
-        <h2>Tudo o que a propriedade precisa, em cinco linhas.</h2>
-        <p>Escolha o departamento e consulte preços e disponibilidade direto pelo WhatsApp.</p>
+        <div class="eyebrow" data-reveal>Departamentos</div>
+        <h2 data-reveal>Tudo o que a propriedade precisa, em cinco linhas.</h2>
+        <p data-reveal>Escolha o departamento e consulte preços e disponibilidade direto pelo WhatsApp.</p>
       </div>
-      <div class="filters" id="filters" role="group" aria-label="Filtrar departamentos"></div>
+      <div class="filters" id="filters" data-reveal role="group" aria-label="Filtrar departamentos"></div>
       <div class="bento" id="bento"></div>
     </div>
   </section>
@@ -357,15 +374,15 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
     <div class="wrap">
       <div class="band">
         <div>
-          <div class="eyebrow">Venda no atacado</div>
-          <h2>Por que comprar na HN Agropecuária?</h2>
-          <p class="intro">Para quem compra em volume, a conversa começa pela necessidade da propriedade. Peça uma cotação e a equipe monta a proposta com você.</p>
-          <a class="btn btn-wheat" data-wa="Olá! Gostaria de fazer uma cotação de atacado na HN Agropecuária." href="#"><svg class="i" data-icon="wa"></svg> Cotação de atacado</a>
+          <div class="eyebrow" data-reveal>Venda no atacado</div>
+          <h2 data-reveal>Por que comprar na HN Agropecuária?</h2>
+          <p class="intro" data-reveal>Para quem compra em volume, a conversa começa pela necessidade da propriedade. Peça uma cotação e a equipe monta a proposta com você.</p>
+          <a class="btn btn-wheat" data-reveal data-wa="Olá! Gostaria de fazer uma cotação de atacado na HN Agropecuária." href="#"><svg class="i" data-icon="wa"></svg> Cotação de atacado</a>
         </div>
         <div class="perks">
-          <div class="perk"><div class="ic"><svg class="i" data-icon="package"></svg></div><div><h3>Condições especiais para compras em lote</h3><p>Preços e condições pensados para o produtor rural e para quem compra em quantidade.</p></div></div>
-          <div class="perk"><div class="ic"><svg class="i" data-icon="users"></svg></div><div><h3>Equipe técnica preparada</h3><p>Orientação na dosagem e no manejo correto dos produtos, direto no balcão.</p></div></div>
-          <div class="perk"><div class="ic"><svg class="i" data-icon="truck"></svg></div><div><h3>Pronta-entrega e fácil acesso</h3><p>Estoque físico na Av. Laura de Andrade, em Arcos, para retirar sem esperar.</p></div></div>
+          <div class="perk" data-reveal><div class="ic"><svg class="i" data-icon="package"></svg></div><div><h3>Condições especiais para compras em lote</h3><p>Preços e condições pensados para o produtor rural e para quem compra em quantidade.</p></div></div>
+          <div class="perk" data-reveal><div class="ic"><svg class="i" data-icon="users"></svg></div><div><h3>Equipe técnica preparada</h3><p>Orientação na dosagem e no manejo correto dos produtos, direto no balcão.</p></div></div>
+          <div class="perk" data-reveal><div class="ic"><svg class="i" data-icon="truck"></svg></div><div><h3>Pronta-entrega e fácil acesso</h3><p>Estoque físico na Av. Laura de Andrade, em Arcos, para retirar sem esperar.</p></div></div>
         </div>
       </div>
     </div>
@@ -374,11 +391,11 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
   <section class="block" id="contato" style="padding-top:0">
     <div class="wrap">
       <div class="head">
-        <div class="eyebrow">Contato &amp; localização</div>
-        <h2>Venha até o balcão ou peça sua cotação.</h2>
+        <div class="eyebrow" data-reveal>Contato &amp; localização</div>
+        <h2 data-reveal>Venha até o balcão ou peça sua cotação.</h2>
       </div>
       <div class="contact">
-        <div class="panel">
+        <div class="panel" data-reveal="lg">
           <h3>Onde estamos</h3>
           <address class="addr">
             <div class="ic"><svg class="i" data-icon="pin"></svg></div>
@@ -393,7 +410,7 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
           </table>
           <a class="btn btn-wheat" href="https://www.google.com/maps/dir/?api=1&destination=Av.+Laura+de+Andrade%2C+761%2C+Arcos+-+MG%2C+35588-000" target="_blank" rel="noopener"><svg class="i" data-icon="nav"></svg> Traçar rota no Google Maps</a>
         </div>
-        <div class="panel">
+        <div class="panel" data-reveal="lg">
           <h3>Cotação rápida</h3>
           <p style="color:var(--muted);margin-top:.4rem">Preencha os dados e abra a conversa no WhatsApp com a mensagem pronta.</p>
           <form id="quoteForm">
@@ -417,11 +434,11 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
 
 <footer>
   <div class="wrap">
-    <div>
+    <div data-reveal>
       <a class="logo" href="#inicio"><span class="logo-mark">HN</span><span class="logo-text">HN Agropecuária<small>Arcos · MG</small></span></a>
       <p class="about-f">Atacadista e varejista de insumos agropecuários, nutrição e saúde animal, ferramentas e linha country. 17 anos de tradição e confiança em Arcos e região.</p>
     </div>
-    <div>
+    <div data-reveal>
       <h4>Institucional</h4>
       <ul>
         <li><a href="#sobre">Sobre nós</a></li>
@@ -430,7 +447,7 @@ html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{dis
         <li><a href="#contato">Contato &amp; localização</a></li>
       </ul>
     </div>
-    <div>
+    <div data-reveal>
       <h4>Fale com a gente</h4>
       <ul>
         <li><a data-wa="Olá! Gostaria de fazer uma cotação na HN Agropecuária." href="#"><svg class="i" data-icon="wa"></svg> WhatsApp</a></li>
@@ -500,7 +517,7 @@ var bento = document.getElementById('bento');
 bento.innerHTML = DEPTS.map(function (d) {
   var msg = 'Olá! Gostaria de consultar preços de ' + d.title + ' na HN Agropecuária.';
   var src = photo(IMAGES['d' + d.id], d.id === 1 ? 1400 : 900);
-  return '<article class="dept a' + d.id + (src ? '' : ' nophoto') + '" data-f="' + d.f + '">' +
+  return '<article class="dept a' + d.id + (src ? '' : ' nophoto') + '" data-f="' + d.f + '" data-reveal>' +
     (src ? '<img class="ph" src="' + src + '" alt="' + d.alt + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.parentNode.classList.add(\'nophoto\');this.remove()">' : '') +
     '<span class="badge">' + d.badge + '</span><div class="ic">' + icon(d.icon) + '</div>' +
     '<div class="dept-body"><h3>' + d.title + '</h3><p>' + d.text + '</p>' +
@@ -584,6 +601,45 @@ document.getElementById('year').textContent = new Date().getFullYear();
     im.onerror = function () { im.remove(); }; im.src = photo(IMAGES.hero, 1800);
     document.getElementById('heroArt').appendChild(im);
   }
+})();
+</script>
+<script>
+/* Animações de entrada: cada elemento aparece uma vez (fade + subida curta) e depois volta ao estado normal. */
+(function () {
+  var root = document.documentElement;
+  if (!root.classList.contains('js-anim')) return;
+  var started = performance.now();
+  var mobile = window.matchMedia('(max-width: 600px)');
+  function dur() { return mobile.matches ? 480 : 560; }
+  function show(el, delay) {
+    el.style.setProperty('--d', delay + 'ms');
+    el.classList.add('is-in');
+    setTimeout(function () {
+      el.removeAttribute('data-reveal'); el.classList.remove('is-in'); el.style.removeProperty('--d');
+    }, delay + dur() + 80);
+  }
+  void document.body.offsetHeight;
+
+  /* topo da página: em sequência */
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      document.querySelectorAll('[data-reveal="hero"]').forEach(function (el) {
+        var d = parseInt(el.getAttribute('data-delay'), 10) || 0;
+        show(el, Math.round(d * (mobile.matches ? 0.7 : 1)));
+      });
+    });
+  });
+
+  /* demais seções: ao entrar na tela, com pequeno intervalo entre irmãos */
+  var io = new IntersectionObserver(function (entries) {
+    var vis = entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
+    vis.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+    var step = mobile.matches ? 60 : 80, cap = mobile.matches ? 540 : 720;
+    var base = performance.now() - started < 1500 ? (mobile.matches ? 300 : 450) : 0;
+    vis.forEach(function (el, i) { io.unobserve(el); show(el, base + Math.min(i * step, cap)); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+  document.querySelectorAll('[data-reveal]:not([data-reveal="hero"])').forEach(function (el) { io.observe(el); });
+  window.__revealReady = true;
 })();
 </script>
 
